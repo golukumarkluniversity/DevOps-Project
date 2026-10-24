@@ -1,4 +1,6 @@
 const http = require('node:http');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const port = Number(process.env.PORT || 8080);
 const version = process.env.APP_VERSION || 'local';
@@ -16,6 +18,22 @@ function respond(response, statusCode, body, headers = {}) {
 }
 
 function requestHandler(request, response) {
+  if (request.url === '/') {
+    recordRequest('root', 200);
+    const page = fs.readFileSync(path.join(__dirname, 'index.html'));
+    return respond(response, 200, page, { 'content-type': 'text/html; charset=utf-8' });
+  }
+
+  if (request.url === '/api/status') {
+    recordRequest('api/status', 200);
+    return respond(response, 200, {
+      service: 'gitops-progressive-delivery-demo',
+      version,
+      startedAt,
+      status: 'healthy'
+    });
+  }
+
   if (request.url === '/healthz') {
     recordRequest('healthz', 200);
     return respond(response, 200, { status: 'ok', version });
@@ -38,16 +56,6 @@ function requestHandler(request, response) {
       ''
     ].join('\n');
     return respond(response, 200, body, { 'content-type': 'text/plain; version=0.0.4' });
-  }
-
-  if (request.url === '/') {
-    recordRequest('root', 200);
-    return respond(response, 200, {
-      service: 'gitops-progressive-delivery-demo',
-      version,
-      startedAt,
-      message: 'Release is serving traffic'
-    });
   }
 
   recordRequest('not_found', 404);

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Release Control | GitOps</title>
+  <style>
+    :root { color-scheme: dark; --ink: #e8edf2; --muted: #91a0ad; --panel: #172129; --line: #2a3944; --cyan: #70d6d0; --amber: #f2bd70; --green: #8bdd9b; --bg: #0d151b; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(circle at 80% 0%, #203b42 0, transparent 38%), var(--bg); color: var(--ink); font: 15px/1.5 "Segoe UI", sans-serif; }
+    .shell { max-width: 1180px; margin: 0 auto; padding: 34px 22px 58px; }
+    header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
+    .eyebrow { color: var(--cyan); font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 8px 0 10px; font: 700 clamp(2.2rem, 5vw, 4.6rem)/.96 Georgia, serif; letter-spacing: 0; }
+    .lede { max-width: 600px; margin: 0; color: var(--muted); font-size: 17px; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; border: 1px solid #37664d; border-radius: 999px; padding: 8px 12px; color: var(--green); background: #12241b; white-space: nowrap; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 16px currentColor; }
+    .grid { display: grid; grid-template-columns: 1.4fr .8fr; gap: 18px; }
+    .panel { background: rgba(23, 33, 41, .86); border: 1px solid var(--line); border-radius: 8px; padding: 22px; box-shadow: 0 18px 50px rgba(0,0,0,.18); }
+    .wide { grid-column: 1 / -1; }
+    h2 { margin: 0 0 18px; font-size: 17px; letter-spacing: .02em; }
+    .release { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .release strong { display: block; font-size: 22px; }
+    .release small, small { color: var(--muted); }
+    .version { color: var(--amber); font: 600 13px/1.2 Consolas, monospace; }
+    .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 22px; }
+    .step { position: relative; padding-top: 26px; color: var(--muted); font-size: 12px; }
+    .step::before { content: ""; position: absolute; top: 5px; left: 0; width: 11px; height: 11px; border: 2px solid var(--line); border-radius: 50%; background: var(--panel); }
+    .step::after { content: ""; position: absolute; top: 10px; left: 15px; right: -8px; height: 2px; background: var(--line); }
+    .step:last-child::after { display: none; }
+    .step.done, .step.active { color: var(--ink); }
+    .step.done::before { border-color: var(--green); background: var(--green); }
+    .step.active::before { border-color: var(--amber); background: var(--amber); box-shadow: 0 0 15px rgba(242,189,112,.65); }
+    .stats { display: grid; gap: 12px; }
+    .stat { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 11px; }
+    .stat:last-child { border: 0; }
+    .stat span { color: var(--muted); }
+    .stat strong { color: var(--cyan); font: 600 18px Consolas, monospace; }
+    .links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    a { display: block; color: var(--ink); text-decoration: none; border: 1px solid var(--line); border-radius: 6px; padding: 14px; transition: border-color .2s, transform .2s; }
+    a:hover { border-color: var(--cyan); transform: translateY(-2px); }
+    a strong { display: block; color: var(--cyan); margin-bottom: 4px; }
+    .footer { display: flex; justify-content: space-between; gap: 18px; margin-top: 24px; color: var(--muted); font-size: 12px; }
+    @media (max-width: 760px) { header { display: block; } .badge { margin-top: 20px; } .grid { grid-template-columns: 1fr; } .wide { grid-column: auto; } .links { grid-template-columns: 1fr; } .steps { gap: 4px; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <div class="eyebrow">GitOps release control</div>
+        <h1>Delivery demo</h1>
+        <p class="lede">A living view of the service moving from commit to canary to stable traffic.</p>
+      </div>
+      <div class="badge"><span class="dot"></span> serving traffic</div>
+    </header>
+    <section class="grid">
+      <article class="panel">
+        <div class="release"><div><small>Current release</small><strong>Progressive delivery</strong></div><div class="version" id="version">loading</div></div>
+        <div class="steps" aria-label="Release stages">
+          <div class="step done">Commit</div><div class="step done">Build</div><div class="step done">Scan</div><div class="step active">Canary</div><div class="step">Stable</div>
+        </div>
+      </article>
+      <article class="panel">
+        <h2>Live signals</h2>
+        <div class="stats"><div class="stat"><span>Service</span><strong>healthy</strong></div><div class="stat"><span>Traffic mode</span><strong>canary</strong></div><div class="stat"><span>Rollback</span><strong>armed</strong></div></div>
+      </article>
+      <article class="panel wide">
+        <h2>Operations console</h2>
+        <div class="links">
+          <a href="http://localhost:18081" target="_blank"><strong>Argo CD</strong><small>Application sync and health</small></a>
+          <a href="http://localhost:18082" target="_blank"><strong>Grafana</strong><small>Dashboards and release signals</small></a>
+          <a href="http://localhost:18083" target="_blank"><strong>Prometheus</strong><small>Metrics and canary analysis</small></a>
+        </div>
+      </article>
+    </section>
+    <div class="footer"><span>GitHub Actions → Argo CD → Argo Rollouts</span><span id="started">release metadata loading</span></div>
+  </main>
+  <script>
+    fetch('/api/status').then(response => response.json()).then(data => {
+      document.getElementById('version').textContent = data.version;
+      document.getElementById('started').textContent = `started ${new Date(data.startedAt).toLocaleString()}`;
+    });
+  </script>
+</body>
+</html>
