@@ -5,7 +5,7 @@ resources:
   - ../../base
 images:
   - name: ghcr.io/example/gitops-progressive-delivery-demo
-    newName: ghcr.io/example/gitops-progressive-delivery-demo
+    newName: ghcr.io/golukumarkluniversity/devops-project
     newTag: dev
 commonAnnotations:
   app.kubernetes.io/version: dev
