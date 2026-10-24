@@ -4,6 +4,7 @@ metadata:
   name: delivery-demo-canary
   labels:
     app.kubernetes.io/name: delivery-demo
+    release: monitoring
 spec:
   selector:
     matchLabels:
