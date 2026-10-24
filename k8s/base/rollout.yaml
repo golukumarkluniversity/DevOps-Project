@@ -1,0 +1,82 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: delivery-demo
+  labels:
+    app.kubernetes.io/name: delivery-demo
+spec:
+  replicas: 4
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: delivery-demo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: delivery-demo
+    spec:
+      serviceAccountName: delivery-demo
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: ghcr.io/example/gitops-progressive-delivery-demo:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: APP_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['app.kubernetes.io/version']
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+  strategy:
+    canary:
+      canaryService: delivery-demo-canary
+      stableService: delivery-demo
+      trafficRouting:
+        nginx:
+          stableIngress: delivery-demo
+      steps:
+        - setWeight: 10
+        - pause:
+            duration: 2m
+        - analysis:
+            templates:
+              - templateName: delivery-demo-success-rate
+        - setWeight: 25
+        - pause:
+            duration: 2m
+        - setWeight: 50
+        - pause:
+            duration: 2m
+        - analysis:
+            templates:
+              - templateName: delivery-demo-success-rate
+        - setWeight: 100

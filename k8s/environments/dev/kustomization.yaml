@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: progressive-delivery
+resources:
+  - ../../base
+images:
+  - name: ghcr.io/example/gitops-progressive-delivery-demo
+    newName: ghcr.io/example/gitops-progressive-delivery-demo
+    newTag: dev
+commonAnnotations:
+  app.kubernetes.io/version: dev

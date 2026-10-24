@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: delivery-demo-canary
+  labels:
+    app.kubernetes.io/name: delivery-demo
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: delivery-demo
+      app.kubernetes.io/component: canary
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

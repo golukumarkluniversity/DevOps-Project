@@ -1,0 +1,5 @@
+aws_region    = "ap-south-1"
+ami_id       = "ami-REPLACE_FOR_YOUR_REGION"
+key_name     = "REPLACE_WITH_EXISTING_EC2_KEY_PAIR"
+instance_type = "t2.large"
+allowed_cidr  = "YOUR_PUBLIC_IP/32"

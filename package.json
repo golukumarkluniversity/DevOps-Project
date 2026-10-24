@@ -1,0 +1,13 @@
+{
+  "name": "gitops-progressive-delivery-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Health-checked service used by the GitOps progressive delivery demo",
+  "scripts": {
+    "start": "node app/server.js",
+    "test": "node --test app/server.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
