@@ -7,8 +7,8 @@ ENV PORT=8080
 COPY app ./app
 COPY package.json ./package.json
 
-RUN addgroup -S app && adduser -S app -G app
-USER app
+RUN addgroup -S -g 10001 app && adduser -S -u 10001 -G app app
+USER 10001
 
 EXPOSE 8080
 CMD ["node", "app/server.js"]
