@@ -6,6 +6,6 @@ resources:
 images:
   - name: ghcr.io/example/gitops-progressive-delivery-demo
     newName: ghcr.io/golukumarkluniversity/devops-project
-    newTag: dev
+    newTag: ui-dashboard
 commonAnnotations:
-  app.kubernetes.io/version: dev
+  app.kubernetes.io/version: ui-dashboard
