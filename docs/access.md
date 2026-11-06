@@ -5,11 +5,11 @@ These commands assume Docker Desktop Kubernetes is running and the port-forwards
 | Console | URL | Demo login |
 | --- | --- | --- |
 | Release dashboard | http://localhost:18084 | No login |
-| Argo CD | https://localhost:18443 | `admin` plus the `argocd-initial-admin-secret` password |
+| Argo CD | http://localhost:18081 | `admin` plus the `argocd-initial-admin-secret` password |
 | Grafana | http://localhost:18082 | `admin` plus the `monitoring-grafana` secret password |
 | Prometheus | http://localhost:18083 | No login in this demo |
 
-Argo CD uses a local self-signed certificate. Accept the browser warning for local development.
+Argo CD runs in insecure HTTP mode for this local demo, so no certificate warning is required.
 
 Retrieve the demo passwords without committing them to Git:
 
