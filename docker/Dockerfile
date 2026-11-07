@@ -7,6 +7,9 @@ ENV PORT=8080
 COPY app ./app
 COPY package.json ./package.json
 
+RUN rm -rf /usr/local/lib/node_modules/npm \
+  && rm -f /usr/local/bin/npm /usr/local/bin/npx
+
 RUN addgroup -S -g 10001 app && adduser -S -u 10001 -G app app
 USER 10001
 
